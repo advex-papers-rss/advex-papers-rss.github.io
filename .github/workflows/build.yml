@@ -1,0 +1,32 @@
+name: Generate RSS Feeds
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: Generate
+        run: |
+          python generate.py
+          mkdir public && mv *.xml ./public
+
+      - name: Publish
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          git config --global user.name "Lodour"
+          git config --global user.email "11145354+Lodour@users.noreply.github.com"
+          cd ./public && git init && git add .
+          git commit -m "update:`date +' %Y-%m-%d %H:%m:%S'`"
+          git push --force --quiet "https://Lodour:$TOKEN@github.com/Lodour/advex-papers-rss.git" HEAD:rss
