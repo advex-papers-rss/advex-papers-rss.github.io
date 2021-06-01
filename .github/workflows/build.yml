@@ -1,6 +1,8 @@
 name: RSS Feeds
 
 on:
+  push:
+    branches: [main]
   schedule:
     - cron: "0 */6 * * *"
 
@@ -19,6 +21,7 @@ jobs:
       - name: Generate
         run: |
           python generate.py
+          mkdir public && mv *.xml ./public
 
       - name: Publish
         env:
@@ -26,6 +29,6 @@ jobs:
         run: |
           git config --global user.name "Lodour"
           git config --global user.email "11145354+Lodour@users.noreply.github.com"
-          git init && git add *.xml
+          cd ./public && git init && git add .
           git commit -m "update"
           git push --force --quiet "https://Lodour:$TOKEN@github.com/Lodour/advex-papers-rss.git" HEAD:rss
