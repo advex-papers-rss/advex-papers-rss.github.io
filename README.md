@@ -1,5 +1,8 @@
 # advex-papers-rss
-RSS feed for adversarial example papers.
+RSS feeds for adversarial example papers (updated every 6 hours).
+
+![RSS Feed](https://github.com/advex-papers-rss/advex-papers-rss/actions/workflows/build.yml/badge.svg)
+
 
 ## By date
 | Latest    | RSS Feed                                                                      |
