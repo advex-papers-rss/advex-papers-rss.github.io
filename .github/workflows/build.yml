@@ -19,7 +19,6 @@ jobs:
       - name: Generate
         run: |
           python generate.py
-          mkdir public && mv *.xml ./public
 
       - name: Publish
         env:
@@ -27,6 +26,6 @@ jobs:
         run: |
           git config --global user.name "Lodour"
           git config --global user.email "11145354+Lodour@users.noreply.github.com"
-          cd ./public && git init && git add .
-          git commit -m "update:`date +' %Y-%m-%d %H:%m:%S'`"
+          git init && git add *.xml
+          git commit -m "update"
           git push --force --quiet "https://Lodour:$TOKEN@github.com/Lodour/advex-papers-rss.git" HEAD:rss

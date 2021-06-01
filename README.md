@@ -23,4 +23,4 @@ RSS feeds for adversarial example papers (updated every 6 hours).
 | All         | http://advex-papers-rss.github.io/advex-papers-rss/advex_papers_all.xml    |
 
 ## Thanks
-[Nicholas Carlini](https://nicholas.carlini.com/writing/2019/all-adversarial-example-papers.html)
+[Nicholas Carlini's Paper List](https://nicholas.carlini.com/writing/2019/all-adversarial-example-papers.html)
