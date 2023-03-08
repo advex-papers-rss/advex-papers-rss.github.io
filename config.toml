@@ -1,15 +1,19 @@
-[data]
-url = 'https://nicholas.carlini.com/writing/2019/advex_papers.json'
-author = 'Nicholas Carlini'
+# Configs for RSS generator
 
+# Data source
+url = 'https://nicholas.carlini.com/writing/2019/advex_papers.json'
+
+# Number of days (incrased order without duplicated numbers)
 [days]
 daily = 1
 weekly = 7
 biweekly = 14
 
+# Metadata for RSS
 [rss]
 title = 'Adversarial Example Papers'
 link = 'https://nicholas.carlini.com/writing/2019/all-adversarial-example-papers.html'
 description = 'Adversarial example papers collected by Nicholas Carlini.'
+author.name = 'Nicholas Carlini'
 language = 'en-us'
 generator = 'advex-papers-rss'

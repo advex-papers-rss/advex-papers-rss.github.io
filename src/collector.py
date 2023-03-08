@@ -17,43 +17,46 @@ class PaperCollector(object):
     Collect papers by streaming a json url.
     """
 
-    def __init__(self, url: str, no_earlier_than: datetime):
+    def __init__(self, url: str, num_days: int):
         """
         Initialize a PaperCollector object.
 
         Args:
             url: Link to the json data.
-            no_earlier_than: Only collect papers no earlier than this datetime.
+            num_days: Only collect papers till a few days from now.
         """
         super().__init__()
 
         # Core data
         self.url = url
-        self.no_earlier_than = no_earlier_than
+        self.num_days = num_days
+        self.start_time = None
 
         # Collected papers
         self.paper_list = []
-
-        # Running paper
         self.paper = None
 
-    def run(self) -> list[Paper]:
+    def run(self) -> tuple[datetime, list[Paper]]:
         """
         Start the collection.
 
         Returns:
+            Started time of collection.
             A list of Paper dataclass instances.
         """
-        # Streaming json data until StopCollectingPapers
         logger.info('Start collecting papers.')
+        self.start_time = datetime.now(timezone.utc)
+
+        # Streaming json data until StopCollectingPapers
         try:
             with requests.get(self.url, stream=True) as response:
                 json_stream.requests.visit(response, self._collect_item)
         except StopCollectingPapers as err:
             logger.info(err)
+        finally:
             logger.info('Done collecting papers.')
 
-        return self.paper_list
+        return self.start_time, self.paper_list
 
     def _collect_item(self, item: str, path: tuple[int, int, ...]) -> None:
         """
@@ -82,8 +85,8 @@ class PaperCollector(object):
                 self.paper.date = date
 
                 # Stop if reached an old paper
-                if date < self.no_earlier_than:
-                    raise StopCollectingPapers(f'Found paper on {date}, earlier than {self.no_earlier_than}.')
+                if (self.start_time - date).days > self.num_days:
+                    raise StopCollectingPapers(f'Found paper on {date}, earlier than {self.num_days} days.')
 
             # url
             case 1:
@@ -99,7 +102,7 @@ class PaperCollector(object):
 
             # abstract (last item of a paper)
             case 4:
-                self.paper.abstract = item.replace('\n', ' ')
+                self.paper.abstract = item
 
                 # Done collecting items of this paper
                 self.paper_list.append(self.paper)
