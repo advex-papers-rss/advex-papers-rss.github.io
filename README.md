@@ -10,11 +10,11 @@ _Note: This script streams the data to save the traffic._
 
 ## RSS Feeds
 
-| Latest   | RSS Feed                                                                      |
-|----------|-------------------------------------------------------------------------------|
-| daily    | https://advex-papers-rss.github.io/advex-papers-rss/advex_papers_daily.xml    |
-| weekly   | https://advex-papers-rss.github.io/advex-papers-rss/advex_papers_weekly.xml   |
-| biweekly | https://advex-papers-rss.github.io/advex-papers-rss/advex_papers_biweekly.xml |
+| Latest   | RSS Feed                                        |
+|----------|-------------------------------------------------|
+| daily    | https://advex-papers-rss.github.io/daily.xml    |
+| weekly   | https://advex-papers-rss.github.io/weekly.xml   |
+| biweekly | https://advex-papers-rss.github.io/biweekly.xml |
 
 ## Data Source
 

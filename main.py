@@ -21,7 +21,7 @@ def main():
 
     # Generate feeds
     for feed, tag in PaperFeedGenerator(paper_list=paper_list, config=config):
-        dump_feed(feed, f'advex_papers_{tag}.xml')
+        dump_feed(feed, f'{tag}.xml')
 
 
 if __name__ == '__main__':
