@@ -1,12 +1,46 @@
 from xml.dom import minidom
-from xml.etree.ElementTree import tostring, Element
+from xml.etree.ElementTree import tostring, Element, SubElement
 
 from loguru import logger
 
 
-def dump_feed(feed: Element, filename: str) -> None:
+def rss_add(parent: Element, key: str, value: str | dict) -> None:
     """
-    Dump an RSS feed to xml file.
+    Shortcut for creating a sub-node in RSS.
+
+    Args:
+        parent: The parent node.
+        key: The name of the sub-node.
+        value: The content of the sub-node (nested by dict).
+
+    Returns:
+        None
+    """
+    while isinstance(value, dict):
+        parent = SubElement(parent, key)
+        key, value = next(iter(value.items()))
+
+    SubElement(parent, key).text = value
+
+
+def rss_add_dict(parent: Element, data: dict[str, str | dict]) -> None:
+    """
+    Shortcut for creating multiple sub-nodes in RSS.
+
+    Args:
+        parent: The parent node.
+        data: A dict whose (key, value) pairs will be added.
+
+    Returns:
+        None
+    """
+    for k, v in data.items():
+        rss_add(parent, k, v)
+
+
+def save_feed(feed: Element, filename: str) -> None:
+    """
+    Save an RSS feed to xml file.
 
     Args:
         feed: Feed node.
