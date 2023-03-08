@@ -50,7 +50,7 @@ jobs:
       - name: Generate Feeds
         run: |
           python main.py
-          mkdir public && mv *.xml ./public
+          mkdir public && mv index.html *.xml ./public
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
