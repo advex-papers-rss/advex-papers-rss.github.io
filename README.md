@@ -3,6 +3,9 @@
 ![Python](https://img.shields.io/badge/Python-3.11-ff69b4)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 [![RSS Feed](https://github.com/advex-papers-rss/advex-papers-rss/actions/workflows/build.yml/badge.svg)](https://github.com/advex-papers-rss/advex-papers-rss/actions)
+[![RSS Feed](https://img.shields.io/badge/RSS-daily-orange?logo=rss)](https://advex-papers-rss.github.io/daily.xml)
+[![RSS Feed](https://img.shields.io/badge/RSS-weekly-orange?logo=rss)](https://advex-papers-rss.github.io/weekly.xml)
+[![RSS Feed](https://img.shields.io/badge/RSS-biweekly-orange?logo=rss)](https://advex-papers-rss.github.io/biweekly.xml)
 
 RSS feeds for adversarial example papers (updated every 24 hours).
 
