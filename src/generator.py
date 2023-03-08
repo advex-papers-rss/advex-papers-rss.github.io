@@ -1,8 +1,8 @@
-from datetime import datetime
+import tomllib
 from typing import Generator
 from xml.etree.ElementTree import Element, SubElement
 
-from src.base import Paper
+from src.collector import PaperCollector
 from src.utils import rss_add_dict, rss_add
 
 
@@ -11,33 +11,37 @@ class FeedGenerator(object):
     Generate RSS feed from a list of papers.
     """
 
-    def __init__(self, paper_list: list[Paper], config: dict, start_time: datetime):
+    def __init__(self, config_file: str):
         """
         Initialize a FeedGenerator object.
 
         Args:
-            paper_list: A list of Paper dataclass instances.
-            config: Configure for the generator.
+            config_file: Path to the generator's config file.
         """
         super().__init__()
 
+        # Load config
+        with open(config_file, 'rb') as f:
+            self.config = tomllib.load(f)
+
         # Extract important configs
-        self.paper_list = paper_list
-        self.start_time = start_time
-        self.config = config
-        self.by_days = {day: tag for tag, day in config['days'].items()}
+        self.by_days = {day: tag for tag, day in self.config['days'].items()}
+
+        # Get paper list
+        collector = PaperCollector(url=self.config['url'], num_days=max(self.by_days))
+        self.start_time, self.paper_list = collector.run()
 
         # Prepare RSS feed
         self.feed, self.channel = None, None
 
-    def init_feed(self):
+    def _init_feed(self):
         """ Initialize RSS feed and set metadata. """
         self.feed = Element('rss', version='2.0')
         self.channel = SubElement(self.feed, 'channel')
         rss_add_dict(self.channel, self.config['rss'])
         rss_add(self.channel, 'lastBuildDate', self.start_time.isoformat(timespec='seconds'))
 
-    def iter_feed_tags(self) -> Generator[str, None, None]:
+    def _iter_feed_tags(self) -> Generator[str, None, None]:
         """ Add all papers and yield feed tags when matching desired conditions. """
 
         for paper in self.paper_list:
@@ -67,6 +71,6 @@ class FeedGenerator(object):
 
     def __iter__(self) -> Generator[tuple[Element, str], None, None]:
         """ Return an iterator over the RSS feeds and tags. """
-        self.init_feed()
-        for tag in self.iter_feed_tags():
+        self._init_feed()
+        for tag in self._iter_feed_tags():
             yield self.feed, tag
