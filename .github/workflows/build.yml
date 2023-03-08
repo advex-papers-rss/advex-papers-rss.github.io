@@ -57,6 +57,9 @@ jobs:
         with:
           path: ./public
 
+      - name: Dummy commit
+        uses: gautamkrishnar/keepalive-workflow@v1
+
   # Deployment job
   deploy:
     environment:
