@@ -17,19 +17,19 @@ class PaperCollector(object):
     Collect papers by streaming a json url.
     """
 
-    def __init__(self, url: str, no_earlier_than: datetime):
+    def __init__(self, url: str, until: datetime):
         """
         Initialize a PaperCollector object.
 
         Args:
             url: Link to the json data.
-            no_earlier_than: Only collect papers no earlier than this datetime.
+            until: Only collect papers until a given date
         """
         super().__init__()
 
         # Core data
         self.url = url
-        self.no_earlier_than = no_earlier_than
+        self.until = until
 
         # Collected papers
         self.paper_list = []
@@ -82,8 +82,8 @@ class PaperCollector(object):
                 self.paper.date = date
 
                 # Stop if reached an old paper
-                if date < self.no_earlier_than:
-                    raise StopCollectingPapers(f'Found paper on {date}, earlier than {self.no_earlier_than}.')
+                if date < self.until:
+                    raise StopCollectingPapers(f'Found paper on {date}, earlier than {self.until}.')
 
             # url
             case 1:

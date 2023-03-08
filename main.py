@@ -13,10 +13,10 @@ def main():
     # Get the number of days to collect
     now = datetime.now(timezone.utc)
     max_days = max(config['days'].values())
-    no_earlier_than = now - timedelta(days=max_days + 2)
+    until = now - timedelta(days=max_days + 2)
 
     # Collect papers
-    collector = PaperCollector(url=config['data']['url'], no_earlier_than=no_earlier_than)
+    collector = PaperCollector(url=config['data']['url'], until=until)
     paper_list = collector.run()
 
     # Generate feeds
