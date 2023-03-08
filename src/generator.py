@@ -57,7 +57,7 @@ class FeedGenerator(object):
             paper_data = {
                 'title': paper.title,
                 'link': paper.link,
-                'description': paper.abstract,
+                'description': paper.abstract.replace('\n', ' '),
                 'author': ','.join(paper.authors),
                 'pubDate': paper.date.isoformat(timespec='seconds'),
             }

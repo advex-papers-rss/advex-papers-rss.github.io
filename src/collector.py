@@ -102,7 +102,7 @@ class PaperCollector(object):
 
             # abstract (last item of a paper)
             case 4:
-                self.paper.abstract = item.replace('\n', ' ')
+                self.paper.abstract = item
 
                 # Done collecting items of this paper
                 self.paper_list.append(self.paper)
