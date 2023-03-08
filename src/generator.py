@@ -22,54 +22,37 @@ def _setattr(parent: Element, key: str, value: str) -> None:
     SubElement(parent, key).text = value
 
 
-def _init_feed(build_date: datetime) -> tuple[Element, Element]:
-    """
-    Initialize RSS feed with meta data.
-
-    Args:
-        build_date: The datetime for this generation.
-
-    Returns:
-        The xml nodes for feed and channel.
-    """
-    # Make root nodes
-    feed = Element('rss', version='2.0')
-    channel = SubElement(feed, 'channel')
-
-    # Add meta data
-    _setattr(channel, 'title', 'Adversarial Example Papers')
-    _setattr(channel, 'link', 'https://nicholas.carlini.com/writing/2019/all-adversarial-example-papers.html')
-    _setattr(channel, 'description', 'Adversarial example papers collected by Nicholas Carlini.')
-    _setattr(channel, 'language', 'en-us')
-    _setattr(channel, 'lastBuildDate', build_date.isoformat(timespec='seconds'))
-    _setattr(channel, 'generator', 'advex-papers-rss')
-    _setattr(SubElement(channel, 'author'), 'name', 'Nicholas Carlini')
-
-    return feed, channel
-
-
 class PaperFeedGenerator(object):
     """
     Generate RSS feed from a list of papers.
     """
 
-    def __init__(self, paper_list: list[Paper], by_days: dict[int, str]):
+    def __init__(self, paper_list: list[Paper], config: dict):
         """
         Initialize a PaperFeedGenerator object.
 
         Args:
             paper_list: A list of Paper dataclass instances.
-            by_days: Output a feed for each specified number of day.
+            config: Configure for the generator.
         """
         super().__init__()
 
-        # Set meta data
+        # Set build time
         self.generated_on = datetime.now(timezone.utc)
-        self.feed, self.channel = _init_feed(self.generated_on)
 
-        # Set rss data
+        # Initialize feed and channel
+        feed = Element('rss', version='2.0')
+        channel = SubElement(feed, 'channel')
+        for key, value in config['rss'].items():
+            _setattr(channel, key, value)
+
+        _setattr(channel, 'lastBuildDate', self.generated_on.isoformat(timespec='seconds'))
+        _setattr(SubElement(channel, 'author'), 'name', config['data']['author'])
+        self.feed, self.channel = feed, channel
+
+        # Set paper data
         self.paper_list = paper_list
-        self.by_days = by_days
+        self.by_days = {day: tag for tag, day in config['days'].items()}
 
     def iter_feeds(self) -> Generator[tuple[Element, str], None, None]:
         """
